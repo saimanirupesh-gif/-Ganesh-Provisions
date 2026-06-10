@@ -3778,4 +3778,370 @@ footer {
   }
 }
 
+/* ==========================================
+   11. Responsive Design Media Queries
+   ========================================== */
+
+/* Tablet View Adjustments */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 16px;
+  }
+  .hero-section {
+    padding: 60px 0 80px;
+  }
+  .hero-content h2 {
+    font-size: 2.8rem;
+  }
+}
+
+/* Mobile View Adjustments (Smartphones) */
+@media (max-width: 768px) {
+  /* Hide desktop header navigation, since we have the sticky bottom mobile nav */
+  .nav-links {
+    display: none !important;
+  }
+
+  header {
+    height: 70px;
+  }
+
+  .navbar {
+    height: 70px;
+    padding: 0 12px;
+  }
+
+  .logo-text h1 {
+    font-size: 1.15rem;
+  }
+
+  .logo-text span {
+    font-size: 0.6rem;
+  }
+
+  .nav-actions {
+    gap: 8px;
+  }
+
+  .user-profile-badge {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .user-profile-badge span {
+    display: none; /* Hide "Login" text, keep just icon */
+  }
+
+  /* Hero Section */
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .hero-content h2 {
+    font-size: 2rem;
+    line-height: 1.25;
+  }
+
+  .hero-content p {
+    margin: 0 auto 24px;
+    font-size: 0.95rem;
+  }
+
+  .hero-search-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .quick-chips {
+    justify-content: center;
+  }
+
+  .hero-visual {
+    order: -1; /* Place image container above text on mobile */
+  }
+
+  .hero-image-container {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .floating-stat-card {
+    display: none !important; /* Hide floating card to declutter mobile */
+  }
+
+  /* Category tabs horizontal slider */
+  .categories-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 10px 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .categories-tabs::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  /* Deal of the Day */
+  .deal-section {
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .deal-info {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .countdown-timer {
+    justify-content: center;
+  }
+
+  /* Products Catalog Header */
+  .catalog-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .catalog-header h3 {
+    font-size: 1.45rem;
+  }
+
+  .catalog-filters {
+    width: 100%;
+  }
+
+  .select-filter {
+    width: 100%;
+  }
+
+  /* Products Grid - 2 columns on mobile for nice e-commerce feel */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  /* Compact Product Cards for 2-column view */
+  .product-card {
+    border-radius: var(--radius-sm);
+  }
+
+  .product-details-box {
+    padding: 12px;
+  }
+
+  .product-details-box h4 {
+    font-size: 0.9rem;
+    min-height: auto;
+    margin-bottom: 4px;
+  }
+
+  .product-telugu-name {
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+  }
+
+  .product-desc-truncate {
+    display: none !important; /* Hide product description in card list on mobile to save space */
+  }
+
+  .product-options-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .size-select-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .price-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .price-val {
+    font-size: 1.15rem;
+  }
+
+  .card-dual-buttons {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .btn-card-add, .btn-card-buy, .card-qty-counter {
+    padding: 8px 0;
+    font-size: 0.72rem;
+    height: 34px;
+  }
+
+  .card-qty-counter .qty-dec,
+  .card-qty-counter .qty-inc {
+    width: 28px;
+  }
+
+  .card-badge-container {
+    top: 8px;
+    left: 8px;
+  }
+
+  .badge {
+    padding: 2px 6px;
+    font-size: 0.6rem;
+  }
+
+  .btn-wishlist {
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+
+  /* Mobile Bottom Navigation Bar (Styling) */
+  .mobile-bottom-nav {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 999;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .mobile-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 100%;
+    align-items: center;
+  }
+
+  .mobile-nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    padding: 6px 0;
+    font-family: var(--font-body);
+  }
+
+  .mobile-nav-item i {
+    font-size: 1.15rem;
+    transition: var(--transition-smooth);
+  }
+
+  .mobile-nav-item.active {
+    color: var(--primary-color);
+  }
+
+  .mobile-nav-item.active i {
+    transform: translateY(-2px);
+    color: var(--primary-color);
+  }
+
+  /* Padding body to avoid overlap with bottom navigation */
+  body {
+    padding-bottom: 75px;
+  }
+
+  /* Modal responsiveness */
+  .modal-container {
+    width: 95% !important;
+    max-height: 90vh;
+    padding: 24px 16px !important;
+  }
+
+  .modal-body {
+    padding: 10px 0 !important;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  /* Owner Panel Responsive Columns */
+  .owner-analytics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .owner-grid-panel {
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+  }
+
+  .panel-box {
+    padding: 16px !important;
+  }
+
+  .owner-chart-flex {
+    gap: 4px;
+  }
+
+  /* Responsive Tables */
+  .owner-ledger-table, .gp-invoice-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Extra Small Mobile Screen Adjustments */
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .product-details-box h4 {
+    font-size: 0.85rem;
+  }
+  .price-row .active-price {
+    font-size: 1.05rem;
+  }
+}
+
+/* Desktop View Bottom Nav Override */
+@media (min-width: 769px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+
 
