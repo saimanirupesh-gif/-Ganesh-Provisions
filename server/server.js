@@ -51,7 +51,7 @@ function loadDefaultsFromDataJs() {
   return { catalog: [], coupons: {} };
 }
 
-function syncCatalogAndDataJs() {
+function syncCatalogAndDataJs(forceWriteToDataJs = false) {
   try {
     const dataJsPath = path.join(__dirname, '..', 'data.js');
     if (!fs.existsSync(dataJsPath)) return;
@@ -76,6 +76,23 @@ function syncCatalogAndDataJs() {
       return;
     }
 
+    if (forceWriteToDataJs) {
+      // Force update data.js from database json files (e.g. after POST)
+      console.log("🔄 Force-syncing database changes back to data.js...");
+      const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+      const couponsData = JSON.parse(fs.readFileSync(couponsPath, 'utf8'));
+      
+      const content = `const GROCERY_PRODUCTS = ${JSON.stringify(catalogData, null, 2)};\n\nconst PROMO_COUPONS = ${JSON.stringify(couponsData, null, 2)};\n`;
+      fs.writeFileSync(dataJsPath, content, 'utf8');
+      
+      // Sync their modification times exactly
+      const now = new Date();
+      fs.utimesSync(catalogPath, now, now);
+      fs.utimesSync(couponsPath, now, now);
+      fs.utimesSync(dataJsPath, now, now);
+      return;
+    }
+
     // Both files exist, compare modification times
     const dataJsStats = fs.statSync(dataJsPath);
     const catalogStats = fs.statSync(catalogPath);
@@ -83,8 +100,8 @@ function syncCatalogAndDataJs() {
     const dataJsMtime = dataJsStats.mtimeMs;
     const catalogMtime = catalogStats.mtimeMs;
 
-    // 2-second buffer to avoid write race conditions
-    if (dataJsMtime > catalogMtime + 2000) {
+    // 100ms buffer to avoid small write race conditions
+    if (dataJsMtime > catalogMtime + 100) {
       // data.js was edited manually in the editor. Update the database json files.
       console.log("🔄 Detecting manual edit in data.js. Syncing to database json files...");
       const defaults = loadDefaultsFromDataJs();
@@ -99,9 +116,9 @@ function syncCatalogAndDataJs() {
       const now = new Date();
       fs.utimesSync(catalogPath, now, dataJsStats.mtime);
       fs.utimesSync(couponsPath, now, dataJsStats.mtime);
-    } else if (catalogMtime > dataJsMtime + 2000) {
-      // Database was edited via UI. Update data.js.
-      console.log("🔄 Detecting UI edits in catalog database. Syncing back to data.js...");
+    } else if (catalogMtime > dataJsMtime + 100) {
+      // Database was edited via UI or another process. Update data.js.
+      console.log("🔄 Syncing catalog database changes back to data.js...");
       const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
       const couponsData = JSON.parse(fs.readFileSync(couponsPath, 'utf8'));
       
@@ -558,7 +575,7 @@ app.post('/api/db/:key', (req, res) => {
     console.log(`💾 DB updated and saved: ${key}`);
     
     if (key === 'catalog' || key === 'coupons') {
-      syncCatalogAndDataJs();
+      syncCatalogAndDataJs(true);
     }
     
     return res.json({ success: true });
