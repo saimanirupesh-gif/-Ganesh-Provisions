@@ -78,17 +78,19 @@ class GroceryApp {
           localStorage.setItem('gp_catalog', JSON.stringify(GROCERY_PRODUCTS));
         } else {
            // Auto-remove the deleted seed products if they exist in localStorage
+           const deletedIds = JSON.parse(localStorage.getItem('gp_deleted_products')) || [];
            const removedIds = ['rice-001', 'rice-002', 'rice-003', 'dals-001', 'dals-002', 'dals-003', 'oils-001', 'oils-002', 'oils-003', 'spc-001', 'spc-002', 'spc-003'];
-           const hasStale = parsed.some(p => removedIds.includes(p.id));
+           const allRemovedIds = [...removedIds, ...deletedIds];
+           const hasStale = parsed.some(p => allRemovedIds.includes(p.id));
 
           if (hasStale) {
-            parsed = parsed.filter(p => !removedIds.includes(p.id));
+            parsed = parsed.filter(p => !allRemovedIds.includes(p.id));
             localStorage.setItem('gp_catalog', JSON.stringify(parsed));
           }
 
-          // Auto-add any new seed products that are in GROCERY_PRODUCTS but not in parsed catalog
+          // Auto-add any new seed products that are in GROCERY_PRODUCTS but not in parsed catalog (excluding deleted ones)
           const parsedIds = new Set(parsed.map(p => p.id));
-          const newProducts = GROCERY_PRODUCTS.filter(p => !parsedIds.has(p.id));
+          const newProducts = GROCERY_PRODUCTS.filter(p => !parsedIds.has(p.id) && !deletedIds.includes(p.id));
           if (newProducts.length > 0) {
             parsed = [...parsed, ...newProducts];
             localStorage.setItem('gp_catalog', JSON.stringify(parsed));
@@ -3024,6 +3026,13 @@ class GroceryApp {
 
     if (!confirm(`Are you sure you want to delete ${prod.name} from Ganesh Provisions catalog?`)) return;
 
+    // Track deleted product ID to prevent auto-seeding it back
+    let deletedIds = JSON.parse(localStorage.getItem('gp_deleted_products')) || [];
+    if (!deletedIds.includes(prodId)) {
+      deletedIds.push(prodId);
+      localStorage.setItem('gp_deleted_products', JSON.stringify(deletedIds));
+    }
+
     this.state.catalog = this.state.catalog.filter(p => p.id !== prodId);
     localStorage.setItem('gp_catalog', JSON.stringify(this.state.catalog));
     this.saveToServer('catalog', this.state.catalog);
@@ -3248,6 +3257,7 @@ class GroceryApp {
   }
 
   ownerResetCatalog() {
+    localStorage.removeItem('gp_deleted_products');
     localStorage.setItem('gp_catalog', JSON.stringify(GROCERY_PRODUCTS));
     this.state.catalog = [...GROCERY_PRODUCTS];
     this.saveToServer('catalog', this.state.catalog);
