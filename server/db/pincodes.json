@@ -1,0 +1,17 @@
+[
+  {
+    "val": "600002",
+    "fee": 0,
+    "status": "active"
+  },
+  {
+    "val": "600020",
+    "fee": 20,
+    "status": "active"
+  },
+  {
+    "val": "523001",
+    "fee": 0,
+    "status": "active"
+  }
+]

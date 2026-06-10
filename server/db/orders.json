@@ -1,0 +1,31 @@
+[
+  {
+    "orderId": "GP-110482",
+    "timestamp": 1780894077409,
+    "date": "08/06/2026, 10:17:57",
+    "items": [
+      {
+        "id": "df-001",
+        "name": "Premium Cashew Nuts (Kaju W240)",
+        "emoji": "assets/cashew_nuts.png",
+        "size": "1kg",
+        "price": 1800,
+        "qty": 1
+      }
+    ],
+    "subtotal": 1800,
+    "discount": 0,
+    "delivery": 40,
+    "total": 1840,
+    "status": "delivered",
+    "details": {
+      "name": "Valued Shopper",
+      "phone": "9032173897",
+      "email": "customer@ganeshprovisions.com",
+      "address": "12, Saffron Road, Near Ganesh Temple, Chennai",
+      "pincode": "600001",
+      "deliverySlot": "tomorrow_afternoon",
+      "paymentMethod": "cod"
+    }
+  }
+]

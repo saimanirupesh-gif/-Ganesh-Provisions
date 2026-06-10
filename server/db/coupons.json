@@ -1,0 +1,20 @@
+{
+  "GANESH10": {
+    "discountType": "percent",
+    "value": 10,
+    "minCart": 400,
+    "description": "Get 10% off on all orders above ₹400"
+  },
+  "FREESHIP": {
+    "discountType": "freeship",
+    "value": 0,
+    "minCart": 299,
+    "description": "Free delivery for orders above ₹299"
+  },
+  "FESTIVE50": {
+    "discountType": "flat",
+    "value": 50,
+    "minCart": 600,
+    "description": "Flat ₹50 off on orders above ₹600"
+  }
+}

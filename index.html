@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Optimization -->
+  <title>Ganesh Provisions | Premium Dry Groceries & Spices</title>
+  <meta name="description" content="Welcome to Ganesh Provisions! Browse premium flour, cold-pressed oils, unpolished dals, aromatic spices, and dry fruits. Fast home delivery.">
+  <meta name="keywords" content="Premium flour, Atta, unpolished dal, Kachi Ghani oil, Biryani whole spices, Premium badam kaju, Ganesh Provisions Chennai">
+  <meta name="author" content="Ganesh Provisions Team">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Favicon Mock -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛍️</text></svg>">
+  
+  <!-- Typography & CSS styling -->
+  <link rel="stylesheet" href="style.css?v=111">
+  
+  <!-- FontAwesome Icons (self-hosted to avoid tracking prevention warnings) -->
+  <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+</head>
+<body>
+
+  <!-- 1. PREMIUM SPLASH SCREEN OVERLAY -->
+  <div class="splash-screen" id="gp-splash-screen">
+    <div class="splash-logo-container">
+      <i class="fa-solid fa-store splash-icon"></i>
+      <h2 class="splash-title">Ganesh Provisions</h2>
+      <span class="splash-subtitle">Premium Dry Groceries & Spices</span>
+    </div>
+    <div class="splash-loading-box">
+      <div class="splash-loading-bar-bg">
+        <div class="splash-loading-bar-fill" id="splash-loading-fill"></div>
+      </div>
+      <span class="splash-loading-text">Loading fresh stock details...</span>
+    </div>
+  </div>
+
+  <!-- Dynamic Banner Greeting based on local system time -->
+  <div class="time-banner" id="time-banner">
+    <div class="pulse-icon"></div>
+    <span id="time-banner-text">Loading fresh stocks at Ganesh Provisions...</span>
+  </div>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="container navbar">
+      <!-- Logo Block -->
+      <div class="logo-block" onclick="app.resetFilters()" id="brand-logo">
+        <i class="fa-solid fa-store logo-icon"></i>
+        <div class="logo-text">
+          <h1>Ganesh Provisions</h1>
+          <span>Premium Dry Groceries & Spices</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-links" aria-label="Main navigation">
+        <ul class="nav-links-list">
+          <li><a href="#" class="active" id="nav-home" onclick="app.setView('home'); return false;">Home</a></li>
+          <li><a href="#catalog-section" id="nav-shop" onclick="app.scrollToCatalog(); return false;">Shop Catalog</a></li>
+          <li><a href="#" id="nav-tracker" onclick="app.setView('tracker'); return false;">My Orders</a></li>
+          <li><a href="#" id="nav-owner" onclick="app.setView('owner'); return false;" style="display: none; color: var(--secondary-color); font-weight:700;"><i class="fa-solid fa-chart-line"></i> Owner Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <!-- Cart and User details -->
+      <div class="nav-actions">
+        <!-- Customer Info -->
+        <div class="user-profile-badge" id="user-profile" onclick="app.openLoginModal()">
+          <i class="fa-solid fa-user"></i>
+          <span id="username-display">Login</span>
+        </div>
+
+        <!-- Wishlist -->
+        <button class="btn-action" onclick="app.showWishlist()" title="View Wishlist" id="wishlist-trigger">
+          <i class="fa-regular fa-heart"></i>
+          <span class="badge-count" id="wishlist-count">0</span>
+        </button>
+
+        <!-- Dynamic Cart Toggle -->
+        <button class="btn-action" onclick="app.toggleCartDrawer(true)" title="Shopping Cart" id="cart-trigger">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span class="badge-count" id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN DYNAMIC CONTENT CONTAINER -->
+  <main id="main-view">
+    
+    <!-- HOME VIEW SECTION -->
+    <section id="home-view">
+      <!-- Premium Hero Banner -->
+      <div class="hero-section">
+        <div class="container hero-grid">
+          <div class="hero-content">
+            <h2 id="dynamic-hero-greeting">Welcome to <span>Ganesh Provisions</span></h2>
+            <p>Your trusted neighborhood store for fresh groceries, quality provisions, and daily essentials. Order now and get it delivered to your doorstep!</p>
+            
+            <!-- Live Search Bar -->
+            <div class="hero-search-wrapper">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" placeholder="Search dry groceries (e.g. Basmati, Ghee, Cashews, Cardamoms)..." id="catalog-search" oninput="app.handleSearchInput(event)">
+              <button class="btn-search" onclick="app.triggerSearch()">Search</button>
+              
+              <!-- Search suggestions popup -->
+              <div class="search-suggestions" id="search-suggestions-box"></div>
+            </div>
+            
+            <!-- Quick Category Chips -->
+            <div class="quick-chips">
+              <span>Popular:</span>
+              <button class="chip" onclick="app.quickFilter('Atta')">Atta & Flour</button>
+              <button class="chip" onclick="app.quickFilter('Ghee')">Cow Ghee</button>
+              <button class="chip" onclick="app.quickFilter('Cashew')">Cashew Nuts</button>
+              <button class="chip" onclick="app.quickFilter('Whole')">Biryani Spices</button>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="hero-image-container">
+              <img src="assets/provisions_store_hero.png" alt="Ganesh Provisions Store Banner" class="hero-image" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Tabs Slider -->
+      <div class="container">
+        <ul class="categories-tabs" id="categories-container">
+          <!-- Populated dynamically via JS -->
+        </ul>
+      </div>
+
+      <!-- Main Catalog Display -->
+      <div class="container" id="catalog-section">
+        <div class="catalog-header">
+          <h3 id="catalog-title">Explore Store Inventory</h3>
+          <div class="catalog-filters">
+            <!-- Sort dropdown selector -->
+            <select class="select-filter" id="sort-filter" onchange="app.handleSortChange(event)">
+              <option value="default">Default Sort</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Popularity (Stars)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Catalog Products Grid -->
+        <div class="products-grid" id="products-catalog-grid">
+          <!-- Dynamically filled with products cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE TRACKING & ORDERS VIEW SECTION -->
+    <section id="tracker-view" style="display: none;">
+      <div class="container" style="padding: 40px 24px; min-height: 60vh;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+          <div>
+            <h2 style="font-size: 2.2rem; margin-bottom:6px;">Your Store Profile</h2>
+            <p style="color: var(--text-muted);">Manage details, view histories, and trace active orders.</p>
+          </div>
+          <button class="btn-search" onclick="app.setView('home')" style="background-color: var(--secondary-color);">Back to Shopping</button>
+        </div>
+
+        <!-- Expenses & Billing Summary -->
+        <div class="profile-expenses-grid" id="profile-expenses-summary" style="display: none; margin-bottom: 30px;">
+          <div class="expense-total-card">
+            <div class="expense-stat">
+              <span>Lifetime Money Spent</span>
+              <h4 id="profile-lifetime-spent">₹0.00</h4>
+            </div>
+            <i class="fa-solid fa-wallet expense-icon-big"></i>
+          </div>
+        </div>
+
+        <!-- Orders & Account Grid -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 30px;">
+          <!-- Order History Cards container -->
+          <div>
+            <h3 style="font-size: 1.45rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px;">
+              <i class="fa-solid fa-receipt" style="color: var(--primary-color); margin-right: 8px;"></i>
+              Active & Past Orders
+            </h3>
+            
+            <div id="order-history-container" class="orders-list">
+              <!-- Dynamically populated order logs -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OWNER DASHBOARD VIEW SECTION -->
+    <section id="owner-view" style="display: none;">
+      <div class="container" style="padding: 40px 24px; min-height: 60vh;">
+        
+        <!-- Premium Admin Header Row -->
+        <div class="admin-header-row">
+          <div class="admin-header-back" onclick="app.setView('home')">
+            <i class="fa-solid fa-arrow-left"></i> Back to Shop
+          </div>
+          <div class="admin-header-title-box">
+            <h2>Admin Dashboard</h2>
+            <p>Manage products, offers, and settings</p>
+          </div>
+          <button class="admin-logout-btn" onclick="app.handleLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+
+        <!-- Inner Navigation Capsule -->
+        <div style="text-align: left; margin-bottom: 15px;">
+          <div class="admin-nav-bar">
+            <button class="admin-nav-item active" onclick="app.setAdminTab('products')">
+              <i class="fa-solid fa-magnifying-glass"></i> Products
+            </button>
+            <button class="admin-nav-item" onclick="app.setAdminTab('offers')">
+              <i class="fa-solid fa-bullhorn"></i> Offers
+            </button>
+            <button class="admin-nav-item" onclick="app.setAdminTab('pincodes')">
+              <i class="fa-solid fa-location-dot"></i> Pincodes
+            </button>
+            <button class="admin-nav-item" onclick="app.setAdminTab('settings')">
+              <i class="fa-solid fa-gear"></i> Settings
+            </button>
+          </div>
+        </div>
+
+        <!-- PRODUCTS TAB SECTION -->
+        <div id="admin-sec-products" class="admin-tab-section" style="display: block;">
+
+        <!-- Analytics Telemetry Grid -->
+        <div class="owner-analytics-grid">
+          <div class="analytic-card border-green">
+            <span class="analytic-emoji">💰</span>
+            <div class="analytic-info">
+              <span class="lbl">Today's Revenue</span>
+              <h4 id="owner-revenue">₹0.00</h4>
+            </div>
+          </div>
+          <div class="analytic-card border-saffron">
+            <span class="analytic-emoji">📦</span>
+            <div class="analytic-info">
+              <span class="lbl">Active Orders</span>
+              <h4 id="owner-active-orders">0</h4>
+            </div>
+          </div>
+          <div class="analytic-card border-blue">
+            <span class="analytic-emoji">📈</span>
+            <div class="analytic-info">
+              <span class="lbl">Total Orders Today</span>
+              <h4 id="owner-total-orders">0</h4>
+            </div>
+          </div>
+          <div class="analytic-card border-gold">
+            <span class="analytic-emoji">🏪</span>
+            <div class="analytic-info">
+              <span class="lbl">Catalog Size</span>
+              <h4 id="owner-catalog-count">0 Products</h4>
+            </div>
+          </div>
+        </div>
+
+        <!-- Owner Sales Analytics Flex Charts -->
+        <div class="owner-chart-panel" style="margin-top: 30px;">
+          <div class="owner-chart-header">
+            <h3><i class="fa-solid fa-chart-simple" style="color: var(--secondary-color);"></i> Live Sales Analytics (Daily Volume)</h3>
+          </div>
+          <div class="owner-chart-flex" id="owner-analytics-chart">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Customer Directory & Lifetime Spending Ledger -->
+        <div class="owner-chart-panel" style="margin-top: 30px;">
+          <div class="owner-chart-header">
+            <h3><i class="fa-solid fa-users" style="color: var(--primary-color);"></i> Customer Directory & Spending Ledger</h3>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="owner-ledger-table">
+              <thead>
+                <tr>
+                  <th>Customer Info</th>
+                  <th>Phone Number</th>
+                  <th>Primary Delivery Address</th>
+                  <th>Orders Placed</th>
+                  <th>Lifetime Spending</th>
+                </tr>
+              </thead>
+              <tbody id="owner-customers-list">
+                <!-- Rendered dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Management Panel Splits (Grid Layout) -->
+        <div class="owner-grid-panel">
+          <!-- Daily Orders list Column -->
+          <div class="panel-box card-shadow">
+            <h3 class="panel-title"><i class="fa-solid fa-list-check" style="color:var(--primary-color);"></i> Customer Orders Pipeline</h3>
+            <div class="owner-orders-list" id="owner-orders-container">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Add Product sidebar Column -->
+          <div class="panel-box card-shadow" style="max-height: fit-content;">
+            <h3 class="panel-title"><i class="fa-solid fa-circle-plus" style="color:var(--secondary-color);"></i> Add New Dry Grocery</h3>
+            <form id="owner-add-product-form" onsubmit="app.ownerAddProduct(event)">
+              <div class="form-group">
+                <label for="new-prod-name">Product Name</label>
+                <input type="text" id="new-prod-name" placeholder="e.g. Broken Jasmine Rice" required>
+              </div>
+
+              <div class="form-group">
+                <label for="new-prod-telugu">Telugu Name (Optional)</label>
+                <input type="text" id="new-prod-telugu" placeholder="e.g. గోధుమ పిండి">
+              </div>
+
+              <div class="form-group">
+                <label for="new-prod-image">Product Image URL (Optional)</label>
+                <input type="url" id="new-prod-image" placeholder="e.g. https://images.unsplash.com/photo-...">
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="new-prod-category">Category</label>
+                  <select id="new-prod-category" required>
+                    <option value="flour">Flour & Atta 🌾</option>
+                    <option value="oils">Oils & Ghee 🍯</option>
+                    <option value="dals">Dals & Pulses 🧆</option>
+                    <option value="spices">Spices & Masala 🌶️</option>
+                    <option value="dryfruits">Dry Fruits & Nuts 🌰</option>
+                    <option value="essentials">Daily Essentials 🧂</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="new-prod-original-price">Original Price (INR)</label>
+                  <input type="number" id="new-prod-original-price" placeholder="120" min="1" required>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="new-prod-price">Base Price (INR)</label>
+                  <input type="number" id="new-prod-price" placeholder="100" min="1" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-prod-unit">Base Unit</label>
+                  <input type="text" id="new-prod-unit" placeholder="kg" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="new-prod-sizes">Available Sizes (Comma separated)</label>
+                <input type="text" id="new-prod-sizes" placeholder="500g, 1kg, 2kg, 5kg" required>
+              </div>
+
+              <div class="form-group">
+                <label for="new-prod-desc">Description</label>
+                <textarea id="new-prod-desc" rows="3" placeholder="Enter pure product quality descriptions..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="new-prod-tag">Custom Tag</label>
+                <input type="text" id="new-prod-tag" placeholder="e.g. Premium Quality, 100% Organic">
+              </div>
+
+              <button type="submit" class="btn-checkout" style="margin-top:10px;"><i class="fa-solid fa-floppy-disk"></i> Save to Store Inventory</button>
+            </form>
+
+            <hr style="border:0; border-top: 1px solid var(--border-color); margin: 24px 0 16px;">
+            
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.75rem; color:var(--text-muted);">Developer Utility</span>
+              <button class="btn-modal btn-modal-back" onclick="app.ownerResetCatalog()" style="font-size:0.75rem; padding: 6px 12px; color:#b45309; border-color:#fde68a; background-color:#fef3c7;"><i class="fa-solid fa-rotate-left"></i> Restore Seed Catalog</button>
+            </div>
+          </div>
+        </div>
+        </div> <!-- End PRODUCTS TAB SECTION -->
+
+        <!-- OFFERS TAB SECTION -->
+        <div id="admin-sec-offers" class="admin-tab-section">
+          <div class="owner-grid-panel" style="grid-template-columns: 1.2fr 1fr; gap: 30px;">
+            <!-- Active Coupons list -->
+            <div class="panel-box card-shadow">
+              <h3 class="panel-title"><i class="fa-solid fa-ticket" style="color:var(--primary-color);"></i> Active Store Coupons</h3>
+              <div style="overflow-x: auto;">
+                <table class="owner-ledger-table">
+                  <thead>
+                    <tr>
+                      <th>Coupon Code</th>
+                      <th>Type</th>
+                      <th>Value</th>
+                      <th>Min Cart</th>
+                      <th>Description</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="owner-coupons-list">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Add Coupon Form -->
+            <div class="panel-box card-shadow" style="max-height: fit-content;">
+              <h3 class="panel-title"><i class="fa-solid fa-circle-plus" style="color:var(--secondary-color);"></i> Add New Coupon</h3>
+              <form id="owner-add-coupon-form" onsubmit="app.ownerAddCoupon(event)">
+                <div class="form-group">
+                  <label for="new-coupon-code">Promo Coupon Code</label>
+                  <input type="text" id="new-coupon-code" placeholder="e.g. FESTIVE20" required style="text-transform: uppercase;">
+                </div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="new-coupon-type">Discount Type</label>
+                    <select id="new-coupon-type" required>
+                      <option value="percent">Percentage (%)</option>
+                      <option value="flat">Flat Amount (₹)</option>
+                      <option value="freeship">Free Shipping</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="new-coupon-value">Discount Value</label>
+                    <input type="number" id="new-coupon-value" placeholder="10" min="0" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="new-coupon-min">Minimum Cart Value (₹)</label>
+                  <input type="number" id="new-coupon-min" placeholder="400" min="0" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-coupon-desc">Coupon Description</label>
+                  <input type="text" id="new-coupon-desc" placeholder="Get 10% off on all orders above ₹400" required>
+                </div>
+                <button type="submit" class="btn-checkout" style="margin-top:10px;"><i class="fa-solid fa-floppy-disk"></i> Save Coupon Code</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- PINCODES TAB SECTION -->
+        <div id="admin-sec-pincodes" class="admin-tab-section">
+          <div class="owner-grid-panel" style="grid-template-columns: 1.2fr 1fr; gap: 30px;">
+            <!-- Active Serviceable Pincodes List -->
+            <div class="panel-box card-shadow">
+              <h3 class="panel-title"><i class="fa-solid fa-truck" style="color:var(--primary-color);"></i> Serviceable Delivery Areas</h3>
+              <div style="overflow-x: auto;">
+                <table class="owner-ledger-table">
+                  <thead>
+                    <tr>
+                      <th>Pincode</th>
+                      <th>Delivery Fee Override</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="owner-pincodes-list">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Add Pincode Form -->
+            <div class="panel-box card-shadow" style="max-height: fit-content;">
+              <h3 class="panel-title"><i class="fa-solid fa-circle-plus" style="color:var(--secondary-color);"></i> Add Delivery Area</h3>
+              <form id="owner-add-pincode-form" onsubmit="app.ownerAddPincode(event)">
+                <div class="form-group">
+                  <label for="new-pincode-val">Serviceable Pincode</label>
+                  <input type="text" id="new-pincode-val" placeholder="e.g. 600028" pattern="[0-9]{6}" required>
+                </div>
+                <div class="form-group">
+                  <label for="new-pincode-fee">Delivery Fee Override (₹)</label>
+                  <input type="number" id="new-pincode-fee" placeholder="0" min="0" required>
+                </div>
+                <button type="submit" class="btn-checkout" style="margin-top:10px;"><i class="fa-solid fa-floppy-disk"></i> Add Pincode</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS TAB SECTION -->
+        <div id="admin-sec-settings" class="admin-tab-section">
+          <div class="panel-box card-shadow" style="max-width: 600px; margin: 0 auto;">
+            <h3 class="panel-title"><i class="fa-solid fa-sliders" style="color:var(--primary-color);"></i> Global Store Settings</h3>
+            <form id="owner-settings-form" onsubmit="app.ownerSaveSettings(event)">
+              <div class="form-group">
+                <label for="settings-store-name">Store Display Name</label>
+                <input type="text" id="settings-store-name" placeholder="Ganesh Provisions" required>
+              </div>
+              <div class="form-group">
+                <label for="settings-support-phone">WhatsApp Business / Support Phone</label>
+                <input type="tel" id="settings-support-phone" placeholder="9150436455" pattern="[0-9]{10}" required>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="settings-min-free-ship">Min Order for Free Shipping (₹)</label>
+                  <input type="number" id="settings-min-free-ship" placeholder="299" min="0" required>
+                </div>
+                <div class="form-group">
+                  <label for="settings-ship-fee">Standard Delivery Fee (₹)</label>
+                  <input type="number" id="settings-ship-fee" placeholder="40" min="0" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="settings-store-status">Store Acceptance Status</label>
+                <select id="settings-store-status">
+                  <option value="open">Open (Accepting Orders) 🟢</option>
+                  <option value="closed">Closed (Taking Pre-orders) 🔴</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-checkout" style="margin-top:20px; background-color: var(--primary-color);"><i class="fa-solid fa-floppy-disk"></i> Apply Global Changes</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CART SIDE DRAWER PANEL -->
+  <div class="cart-overlay" id="cart-overlay-mask" onclick="app.toggleCartDrawer(false)">
+    <div class="cart-drawer" onclick="event.stopPropagation()">
+      <!-- Cart Header -->
+      <div class="cart-header">
+        <h3>
+          <i class="fa-solid fa-cart-shopping" style="color: var(--primary-color);"></i>
+          Your Shopping Basket
+        </h3>
+        <button class="btn-close-drawer" onclick="app.toggleCartDrawer(false)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Cart items -->
+      <div class="cart-items-body" id="cart-drawer-items">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Fixed Cart footer calculations -->
+      <div class="cart-footer">
+        <!-- Calculations -->
+        <div class="calc-row">
+          <span>Cart Subtotal</span>
+          <span id="subtotal-val">₹0.00</span>
+        </div>
+        <div class="calc-row">
+          <span>Delivery Charges</span>
+          <span id="delivery-val">₹40.00</span>
+        </div>
+        <div class="calc-row total-row">
+          <span>Estimated Total</span>
+          <span class="total-val" id="total-val">₹0.00</span>
+        </div>
+
+        <!-- Action Button -->
+        <button class="btn-checkout" onclick="app.openCheckoutWizard()" id="checkout-action-btn">
+          Proceed to Secure Checkout
+          <i class="fa-solid fa-circle-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTI-STEP CHECKOUT MODAL WIZARD -->
+  <div class="modal-overlay" id="checkout-modal-mask">
+    <div class="modal-container">
+      <button class="btn-close-modal" onclick="app.closeCheckoutWizard()" title="Back to Menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <!-- Steps Indicator -->
+      <div class="checkout-steps">
+        <div class="step-item active" id="step-node-1">
+          <div class="step-num">1</div>
+          <span class="step-lbl">Delivery</span>
+        </div>
+        <div class="step-item" id="step-node-2">
+          <div class="step-num">2</div>
+          <span class="step-lbl">Time Slot</span>
+        </div>
+        <div class="step-item" id="step-node-3">
+          <div class="step-num">3</div>
+          <span class="step-lbl">Payment</span>
+        </div>
+        <div class="step-item" id="step-node-4">
+          <div class="step-num">4</div>
+          <span class="step-lbl">Receipt</span>
+        </div>
+      </div>
+
+      <!-- Modal Body Content -->
+      <div class="modal-body" id="checkout-wizard-body">
+        <!-- Will render custom HTML depending on step index -->
+      </div>
+
+      <!-- Modal Actions Footer -->
+      <div class="modal-footer" id="checkout-wizard-footer">
+        <button class="btn-modal btn-modal-back" onclick="app.prevCheckoutStep()" id="btn-wizard-back">Back</button>
+        <button class="btn-modal btn-modal-next" onclick="app.nextCheckoutStep()" id="btn-wizard-next">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAILED PRODUCT DISCLOSURE MODAL -->
+  <div class="modal-overlay" id="detail-modal-mask" onclick="app.closeProductDetailModal()">
+    <div class="modal-container" style="max-width: 740px;" onclick="event.stopPropagation()">
+      <button class="btn-close-modal" onclick="app.closeProductDetailModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="modal-body" id="detail-modal-body" style="padding: 40px;">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Dual-Role Login Modal -->
+  <!-- OWNER PRODUCT EDIT MODAL -->
+  <div class="modal-overlay" id="owner-product-edit-modal-mask" onclick="app.closeOwnerProductEditModal()">
+    <div class="modal-container" style="max-width: 600px;" onclick="event.stopPropagation()">
+      <button class="btn-close-modal" onclick="app.closeOwnerProductEditModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="modal-body" style="padding: 30px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 20px; color: var(--secondary-color); font-family: var(--font-heading);"><i class="fa-solid fa-pen-to-square"></i> Edit Catalog Product</h3>
+        
+        <form id="owner-product-edit-form" onsubmit="app.ownerSaveProductEdit(event)">
+          <input type="hidden" id="edit-prod-id">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="edit-prod-name">Product Name</label>
+              <input type="text" id="edit-prod-name" placeholder="e.g. Broken Jasmine Rice" required>
+            </div>
+            <div class="form-group">
+              <label for="edit-prod-telugu">Telugu Name</label>
+              <input type="text" id="edit-prod-telugu" placeholder="e.g. గోధుమ పిండి">
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="edit-prod-category">Category</label>
+              <select id="edit-prod-category" required>
+                <option value="flour">Flour & Atta 🌾</option>
+                <option value="oils">Oils & Ghee 🍯</option>
+                <option value="dals">Dals & Pulses 🧆</option>
+                <option value="spices">Spices & Masala 🌶️</option>
+                <option value="dryfruits">Dry Fruits & Nuts 🌰</option>
+                <option value="essentials">Daily Essentials 🧂</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="edit-prod-image">Product Image URL</label>
+              <input type="url" id="edit-prod-image" placeholder="e.g. https://images.unsplash.com/photo-...">
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="edit-prod-original-price">Original Price (INR)</label>
+              <input type="number" id="edit-prod-original-price" placeholder="120" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="edit-prod-price">Base Price (INR)</label>
+              <input type="number" id="edit-prod-price" placeholder="100" min="1" required>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="edit-prod-unit">Base Unit</label>
+              <input type="text" id="edit-prod-unit" placeholder="kg" required>
+            </div>
+            <div class="form-group">
+              <label for="edit-prod-sizes">Available Sizes (Comma separated)</label>
+              <input type="text" id="edit-prod-sizes" placeholder="500g, 1kg, 2kg, 5kg" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-prod-desc">Description</label>
+            <textarea id="edit-prod-desc" rows="3" placeholder="Enter pure product quality descriptions..." required></textarea>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="edit-prod-tag">Custom Tag</label>
+              <input type="text" id="edit-prod-tag" placeholder="e.g. Premium Quality, 100% Organic">
+            </div>
+            <div class="form-group">
+              <label for="edit-prod-status">Catalog Status</label>
+              <select id="edit-prod-status" required>
+                <option value="in-stock">In Stock</option>
+                <option value="out-of-stock">Out of Stock</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+            <input type="checkbox" id="edit-prod-organic" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="edit-prod-organic" style="margin-bottom: 0; cursor: pointer; font-weight: 600;">100% Organic certified</label>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <button type="button" class="btn-modal btn-modal-back" onclick="app.closeOwnerProductEditModal()">Cancel</button>
+            <button type="submit" class="btn-checkout" style="width: auto; padding: 10px 24px;"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dual-Role Login Modal -->
+  <div class="modal-overlay" id="login-modal-mask" onclick="app.closeLoginModal()">
+    <div class="modal-container" style="max-width: 420px;" onclick="event.stopPropagation()">
+      <button class="btn-close-modal" onclick="app.closeLoginModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="modal-body" style="padding: 0;">
+        <!-- Tab selector switches inside Modal header -->
+        <div class="login-tabs">
+          <button class="login-tab active" id="login-tab-customer" onclick="app.toggleLoginTab('customer')">Customer Portal</button>
+          <button class="login-tab" id="login-tab-owner" onclick="app.toggleLoginTab('owner')">Store Owner</button>
+        </div>
+
+        <div style="padding: 30px;">
+          <!-- CUSTOMER LOGIN BODY -->
+          <div id="login-body-customer">
+            <!-- Form View (Visible when not logged in) -->
+            <div id="login-customer-form-view">
+              <div style="text-align: center; margin-bottom: 24px;">
+                <i class="fa-solid fa-user-tag" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                <h3 style="font-size: 1.4rem;">Customer Sign In</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Access saved addresses & view live order trackings.</p>
+              </div>
+              <form onsubmit="app.handleCustomerLogin(event)">
+                <div class="form-group">
+                  <label for="login-name">Full Name</label>
+                  <input type="text" id="login-name" placeholder="e.g. Mani Raman">
+                </div>
+                <div class="form-group">
+                  <label for="login-phone">Mobile Number</label>
+                  <input type="tel" id="login-phone" placeholder="98765 43210" pattern="[0-9]{10}">
+                </div>
+                <div class="form-group" id="otp-group" style="display: none;">
+                  <label for="login-otp">Enter 4-Digit OTP</label>
+                  <input type="text" id="login-otp" placeholder="1234" pattern="[0-9]{4}">
+                </div>
+                <button type="submit" class="btn-checkout" style="margin-top: 10px;" id="login-btn-submit">Request OTP</button>
+              </form>
+            </div>
+            
+            <!-- Profile View (Visible when logged in) -->
+            <div id="login-customer-profile-view" style="display: none; text-align: left;">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-user" style="font-size: 3.5rem; color: var(--primary-color); margin-bottom: 8px;"></i>
+                <h3 style="font-size: 1.3rem;" id="login-profile-name">Customer Name</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;" id="login-profile-phone">Phone: 98765 43210</p>
+                <div style="display: inline-block; margin-top: 6px; padding: 3px 10px; background-color: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 20px; font-size: 0.7rem; font-weight: 600;">
+                  <i class="fa-solid fa-circle-check"></i> Session Active
+                </div>
+              </div>
+
+              <!-- Customer Profile Settings Form -->
+              <form id="customer-settings-form" onsubmit="app.saveCustomerSettings(event)" style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 10px;">
+                <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-dark); display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-user-gear" style="color:var(--primary-color)"></i> Customer Settings</h4>
+                
+                <div class="form-group">
+                  <label for="cust-settings-name" style="font-size:0.75rem;">Full Name</label>
+                  <input type="text" id="cust-settings-name" style="padding: 8px; font-size:0.85rem;" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="cust-settings-phone" style="font-size:0.75rem;">Phone Number</label>
+                  <input type="tel" id="cust-settings-phone" style="padding: 8px; font-size:0.85rem;" pattern="[0-9]{10}" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="cust-settings-email" style="font-size:0.75rem;">Email Address</label>
+                  <input type="email" id="cust-settings-email" style="padding: 8px; font-size:0.85rem;">
+                </div>
+
+                <div class="form-group">
+                  <label for="cust-settings-address" style="font-size:0.75rem;">Delivery Address</label>
+                  <textarea id="cust-settings-address" rows="2" style="padding: 8px; font-size:0.85rem; width:100%; border: 1px solid var(--border-color); border-radius:var(--radius-sm); font-family:inherit; resize:none;" required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="cust-settings-pincode" style="font-size:0.75rem;">Pincode</label>
+                  <input type="text" id="cust-settings-pincode" style="padding: 8px; font-size:0.85rem;" required>
+                </div>
+
+                <button type="submit" class="btn-checkout" style="width: 100%; padding: 10px; font-size:0.85rem; margin-top: 10px; background-color: var(--primary-color); display:flex; justify-content:center; align-items:center; gap:8px;">
+                  <i class="fa-solid fa-floppy-disk"></i> Save Settings
+                </button>
+              </form>
+              
+              <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <button onclick="app.closeLoginModal(); app.setView('tracker')" class="btn-checkout" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: var(--secondary-color); padding: 10px; font-size:0.85rem;">
+                  <i class="fa-solid fa-receipt"></i> Go to My Orders Tracker
+                </button>
+                <button onclick="app.handleCustomerLogoutInModal()" class="btn-checkout" style="width: 100%; background-color: white; border: 1px solid #ef4444; color: #ef4444; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; font-size:0.85rem;">
+                  <i class="fa-solid fa-right-from-bracket"></i> Sign Out / Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STORE OWNER LOGIN BODY -->
+          <div id="login-body-owner" style="display: none;">
+            <div style="text-align: center; margin-bottom: 24px;">
+              <i class="fa-solid fa-user-shield" style="font-size: 3rem; color: var(--secondary-color); margin-bottom: 10px;"></i>
+              <h3 style="font-size: 1.4rem;">Store Owner Sign In</h3>
+            </div>
+            <form onsubmit="app.handleOwnerLogin(event)">
+              <div class="form-group">
+                <label for="owner-username">Phone / Username</label>
+                <input type="text" id="owner-username" placeholder="owner" required>
+              </div>
+              <div class="form-group">
+                <label for="owner-password">Access Password</label>
+                <input type="password" id="owner-password" placeholder="••••••••" required>
+              </div>
+              <button type="submit" class="btn-checkout" style="background-color: var(--secondary-color); margin-top: 10px;">Secure Owner Portal</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Box -->
+  <div class="toast-container" id="toast-wrapper"></div>
+
+  <!-- POST-DELIVERY INTERACTIVE FEEDBACK SHEET -->
+  <div class="rating-sheet-mask" id="rating-sheet-mask" onclick="app.closeFeedbackSheet()">
+    <div class="rating-sheet-container" id="rating-sheet-container" onclick="event.stopPropagation()">
+      <button class="btn-close-modal" onclick="app.closeFeedbackSheet()" style="position:absolute; top:20px; right:20px;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="rating-sheet-header">
+        <i class="fa-solid fa-star-half-stroke" style="font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 8px;"></i>
+        <h3>Rate Your Order Experience</h3>
+        <p>Your feedback helps Ganesh Provisions deliver only the freshest groceries.</p>
+      </div>
+      <div class="rating-stars-row" id="feedback-stars-row">
+        <button class="rating-star-btn" data-star="1" onclick="app.handleFeedbackStar(1)"><i class="fa-solid fa-star"></i></button>
+        <button class="rating-star-btn" data-star="2" onclick="app.handleFeedbackStar(2)"><i class="fa-solid fa-star"></i></button>
+        <button class="rating-star-btn" data-star="3" onclick="app.handleFeedbackStar(3)"><i class="fa-solid fa-star"></i></button>
+        <button class="rating-star-btn" data-star="4" onclick="app.handleFeedbackStar(4)"><i class="fa-solid fa-star"></i></button>
+        <button class="rating-star-btn" data-star="5" onclick="app.handleFeedbackStar(5)"><i class="fa-solid fa-star"></i></button>
+      </div>
+      <div class="feedback-chips-container" id="feedback-chips-group">
+        <button class="feedback-chip-btn" onclick="app.toggleFeedbackChip(this)">Fresh Products</button>
+        <button class="feedback-chip-btn" onclick="app.toggleFeedbackChip(this)">Good Quality</button>
+        <button class="feedback-chip-btn" onclick="app.toggleFeedbackChip(this)">Fast Delivery</button>
+        <button class="feedback-chip-btn" onclick="app.toggleFeedbackChip(this)">Packaging was Good</button>
+      </div>
+      <div class="feedback-comment-box">
+        <textarea id="feedback-comment-text" placeholder="Write a short review about product quality and delivery experience..." rows="3"></textarea>
+      </div>
+      <div class="feedback-image-uploader" onclick="document.getElementById('feedback-file-input').click()">
+        <i class="fa-solid fa-camera"></i>
+        <span>Attach Product Picture (Optional)</span>
+        <input type="file" id="feedback-file-input" accept="image/*" style="display:none;" onchange="app.handleFeedbackImage(event)">
+        <img id="feedback-image-preview" class="feedback-image-preview" src="">
+      </div>
+      <div style="text-align: center;">
+        <button class="btn-checkout" onclick="app.submitFeedback()" style="max-width:300px;">Submit Shop Feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM STICKY NAVIGATION -->
+  <div class="mobile-bottom-nav">
+    <div class="mobile-nav-grid">
+      <button class="mobile-nav-item active" onclick="app.setView('home')" id="mob-nav-home">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="mobile-nav-item" onclick="app.scrollToCatalog()" id="mob-nav-cat">
+        <i class="fa-solid fa-grip"></i>
+        <span>Shop</span>
+      </button>
+      <button class="mobile-nav-item" onclick="app.toggleCartDrawer(true)" id="mob-nav-cart">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <span>Basket</span>
+      </button>
+      <button class="mobile-nav-item" onclick="app.setView('tracker')" id="mob-nav-orders">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Orders</span>
+      </button>
+      <button class="mobile-nav-item" onclick="app.openLoginModal()" id="mob-nav-profile">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- WHATSAPP NUMBER COLLECTION MODAL -->
+  <div class="wa-modal-overlay" id="wa-modal-overlay">
+    <div class="wa-modal-card">
+      <button class="wa-modal-close" onclick="app.closeWhatsAppModal()" title="Close">&times;</button>
+      <div class="wa-modal-icon">
+        <i class="fa-brands fa-whatsapp"></i>
+      </div>
+      <h3 class="wa-modal-title">Get Your Receipt on WhatsApp</h3>
+      <p class="wa-modal-subtitle">Enter your WhatsApp number to receive your order receipt directly — no screenshots needed!</p>
+      <form id="wa-number-form" onsubmit="event.preventDefault(); app.submitWhatsAppNumber();">
+        <div class="wa-input-wrapper">
+          <span class="wa-input-prefix">+91</span>
+          <input type="tel" id="wa-phone-input" placeholder="98765 43210" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel">
+        </div>
+        <button type="submit" class="wa-submit-btn">
+          <i class="fa-brands fa-whatsapp"></i> Continue to Checkout
+        </button>
+      </form>
+      <p class="wa-modal-note"><i class="fa-solid fa-lock"></i> Your number is only used to send the receipt. We don't spam.</p>
+    </div>
+  </div>
+
+  <!-- HIDDEN PRINTABLE INVOICE TEMPLATE -->
+  <div class="gp-invoice-print-area" id="gp-invoice-print-area">
+    <!-- Populated dynamically and printed -->
+  </div>
+
+  <script src="data.js?v=111"></script>
+  <script src="app.js?v=111"></script>
+</body>
+</html>
