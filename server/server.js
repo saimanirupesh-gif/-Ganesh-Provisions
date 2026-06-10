@@ -51,10 +51,79 @@ function loadDefaultsFromDataJs() {
   return { catalog: [], coupons: {} };
 }
 
+function syncCatalogAndDataJs() {
+  try {
+    const dataJsPath = path.join(__dirname, '..', 'data.js');
+    if (!fs.existsSync(dataJsPath)) return;
+
+    const catalogPath = DB_FILES.catalog;
+    const couponsPath = DB_FILES.coupons;
+
+    const hasCatalog = fs.existsSync(catalogPath);
+    const hasCoupons = fs.existsSync(couponsPath);
+
+    if (!hasCatalog || !hasCoupons) {
+      // Seed them from data.js if they don't exist
+      const defaults = loadDefaultsFromDataJs();
+      if (!hasCatalog) {
+        fs.writeFileSync(catalogPath, JSON.stringify(defaults.catalog, null, 2), 'utf8');
+        console.log("💾 Seeded catalog.json from data.js");
+      }
+      if (!hasCoupons) {
+        fs.writeFileSync(couponsPath, JSON.stringify(defaults.coupons, null, 2), 'utf8');
+        console.log("💾 Seeded coupons.json from data.js");
+      }
+      return;
+    }
+
+    // Both files exist, compare modification times
+    const dataJsStats = fs.statSync(dataJsPath);
+    const catalogStats = fs.statSync(catalogPath);
+
+    const dataJsMtime = dataJsStats.mtimeMs;
+    const catalogMtime = catalogStats.mtimeMs;
+
+    // 2-second buffer to avoid write race conditions
+    if (dataJsMtime > catalogMtime + 2000) {
+      // data.js was edited manually in the editor. Update the database json files.
+      console.log("🔄 Detecting manual edit in data.js. Syncing to database json files...");
+      const defaults = loadDefaultsFromDataJs();
+      if (defaults.catalog && defaults.catalog.length > 0) {
+        fs.writeFileSync(catalogPath, JSON.stringify(defaults.catalog, null, 2), 'utf8');
+      }
+      if (defaults.coupons && Object.keys(defaults.coupons).length > 0) {
+        fs.writeFileSync(couponsPath, JSON.stringify(defaults.coupons, null, 2), 'utf8');
+      }
+      
+      // Set database files mtimes to match data.js to avoid looping/skew
+      const now = new Date();
+      fs.utimesSync(catalogPath, now, dataJsStats.mtime);
+      fs.utimesSync(couponsPath, now, dataJsStats.mtime);
+    } else if (catalogMtime > dataJsMtime + 2000) {
+      // Database was edited via UI. Update data.js.
+      console.log("🔄 Detecting UI edits in catalog database. Syncing back to data.js...");
+      const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+      const couponsData = JSON.parse(fs.readFileSync(couponsPath, 'utf8'));
+      
+      const content = `const GROCERY_PRODUCTS = ${JSON.stringify(catalogData, null, 2)};\n\nconst PROMO_COUPONS = ${JSON.stringify(couponsData, null, 2)};\n`;
+      fs.writeFileSync(dataJsPath, content, 'utf8');
+      
+      // Sync data.js mtime to match catalog.json
+      const newStats = fs.statSync(catalogPath);
+      fs.utimesSync(dataJsPath, new Date(), newStats.mtime);
+    }
+  } catch (err) {
+    console.error("❌ Error during bidirectional catalog sync:", err);
+  }
+}
+
 function initializeDatabase() {
   if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
   }
+
+  // First sync files to make sure they are up-to-date
+  syncCatalogAndDataJs();
 
   const defaults = loadDefaultsFromDataJs();
 
@@ -487,6 +556,11 @@ app.post('/api/db/:key', (req, res) => {
     const data = req.body;
     fs.writeFileSync(DB_FILES[key], JSON.stringify(data, null, 2));
     console.log(`💾 DB updated and saved: ${key}`);
+    
+    if (key === 'catalog' || key === 'coupons') {
+      syncCatalogAndDataJs();
+    }
+    
     return res.json({ success: true });
   } catch (err) {
     console.error(`❌ Failed to write db key ${key}:`, err);
