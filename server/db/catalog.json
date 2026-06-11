@@ -1,109 +1,5 @@
 [
   {
-    "id": "df-001",
-    "name": "Premium Cashew Nuts (Kaju W240)",
-    "teluguName": "ప్రీమియం జీడిపప్పు",
-    "category": "dryfruits",
-    "price": 450,
-    "originalPrice": 549,
-    "unit": "pack",
-    "image": "assets/cashew_nuts.png",
-    "description": "Jumbo sized W240 whole cashew nuts. Richly white, creamy texture, sweet nutty flavor, and packed with vitamins and minerals.",
-    "rating": 4.8,
-    "reviews": 215,
-    "sizes": [
-      "250g",
-      "500g",
-      "1kg"
-    ],
-    "inStock": true,
-    "isOrganic": false,
-    "tag": "Premium Quality",
-    "reviewsList": [
-      {
-        "id": "rev-df-1",
-        "author": "Gayatri Krishnan",
-        "rating": 5,
-        "date": "2026-05-13",
-        "tags": [
-          "Good Quality",
-          "Packaging was Good"
-        ],
-        "comment": "Large, crisp, sweet cashews. Delivered intact without breakage. Perfect choice for gifting or cooking.",
-        "image": ""
-      }
-    ]
-  },
-  {
-    "id": "df-002",
-    "name": "California Almonds (Badam)",
-    "teluguName": "కాలిఫోర్నియా బాదం",
-    "category": "dryfruits",
-    "price": 380,
-    "originalPrice": 449,
-    "unit": "pack",
-    "image": "https://images.unsplash.com/photo-1508061458087-2152ee21a149?auto=format&fit=crop&q=80&w=600",
-    "description": "Vibrant, high-fiber, crispy California almonds. Regular consumption promotes heart health, sharp brain, and steady energy.",
-    "rating": 4.7,
-    "reviews": 289,
-    "sizes": [
-      "250g",
-      "500g",
-      "1kg"
-    ],
-    "inStock": true,
-    "isOrganic": false,
-    "tag": "Daily Health",
-    "reviewsList": [
-      {
-        "id": "rev-df-2",
-        "author": "Amit Roy",
-        "rating": 4,
-        "date": "2026-05-21",
-        "tags": [
-          "Fresh Products"
-        ],
-        "comment": "Nice crispy almonds. Excellent daily health snack.",
-        "image": ""
-      }
-    ]
-  },
-  {
-    "id": "df-003",
-    "name": "Green Raisins (Kishmish)",
-    "teluguName": "పచ్చ ఎండు ద్రాక్ష",
-    "category": "dryfruits",
-    "price": 150,
-    "originalPrice": 179,
-    "unit": "pack",
-    "image": "https://images.unsplash.com/photo-1614735241165-6756e1df61ab?auto=format&fit=crop&q=80&w=600",
-    "description": "Naturally sweet, long green raisins. Soft, seedless, and chewy. Excellent natural sweeteners for desserts and biryanis.",
-    "rating": 4.6,
-    "reviews": 142,
-    "sizes": [
-      "250g",
-      "500g",
-      "1kg"
-    ],
-    "inStock": true,
-    "isOrganic": true,
-    "tag": "Sun Dried",
-    "reviewsList": [
-      {
-        "id": "rev-df-3",
-        "author": "Sheela Verma",
-        "rating": 5,
-        "date": "2026-05-16",
-        "tags": [
-          "Fresh Products",
-          "Good Quality"
-        ],
-        "comment": "Very soft and seedless raisins. Excellent natural sweetness. Ideal addition to my homemade kheer.",
-        "image": ""
-      }
-    ]
-  },
-  {
     "id": "flour-001",
     "name": "Wheat Flour (Atta)",
     "teluguName": "గోధుమ పిండి",
@@ -214,7 +110,7 @@
     "price": 90,
     "originalPrice": 110,
     "unit": "kg",
-    "image": "https://tse3.mm.bing.net/th/id/OIP.VznqXO5D0e_3u7XkAjJ8dQHaE7?pid=Api&P=0&h=180",
+    "image": "https://assets.hyperpure.com/data/images/products/9103b3e2009aa4683ee03ec586f858a0.jpg",
     "description": "Premium quality whole mustard seeds (ఆవాలు) with strong pungent aroma. Essential for South Indian tempering, pickles, and traditional tadka preparations.",
     "rating": 4.7,
     "reviews": 134,
@@ -239,7 +135,8 @@
         "comment": "Excellent mustard seeds. Splutters perfectly in hot oil. Very fresh and aromatic!",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🌶️"
   },
   {
     "id": "spc-005",
@@ -249,7 +146,7 @@
     "price": 45,
     "originalPrice": 50,
     "unit": "kg",
-    "image": "https://5.imimg.com/data5/SELLER/Default/2023/3/293905249/YP/FQ/PY/31273036/coriander-cumin-powder-500x500.jpg",
+    "image": "https://img.clevup.in/67951/1630426679243_coriander.png?width=600&format=webp",
     "description": "Perfectly balanced blend of roasted coriander and cumin seeds powder (ధనియాల పొడి). Adds authentic flavor to curries, dals, and gravies.",
     "rating": 4.6,
     "reviews": 98,
@@ -273,7 +170,8 @@
         "comment": "Excellent blend of dhana jeera. Gives amazing flavor to all our curries.",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🌶️"
   },
   {
     "id": "spc-006",
@@ -283,7 +181,7 @@
     "price": 90,
     "originalPrice": 98,
     "unit": "pack",
-    "image": "https://m.media-amazon.com/images/I/81jj9fNclxL.jpg",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw8s0wswJRuMrd2rlftu8JDwLhkje1E-Ajsw&s",
     "description": "Everest Chicken Masala (చికెన్ మసాలా) – a rich and aromatic blend of premium spices crafted for making restaurant-style chicken curry, biryani, and kebabs.",
     "rating": 4.8,
     "reviews": 187,
@@ -308,7 +206,8 @@
         "comment": "Everest chicken masala gives perfect restaurant taste. My go-to masala for Sunday chicken curry!",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🌶️"
   },
   {
     "id": "spc-007",
@@ -353,7 +252,7 @@
     "price": 102,
     "originalPrice": 120,
     "unit": "box",
-    "image": "https://tse2.mm.bing.net/th/id/OIP._VeSJgkUu_xs02o7L6VQLQHaGR?pid=Api&P=0&h=180",
+    "image": "https://media.andhrajyothy.com/webstories/2025/7/28/584272b7-2aa1-40d6-b899-582343892b4d-inguva-06.jpg",
     "description": "Strong and aromatic compounded asafoetida (ఇంగువ). Adds an unforgettable umami punch to dals, sambar, and vegetable curries. A little goes a long way.",
     "rating": 4.8,
     "reviews": 112,
@@ -376,7 +275,8 @@
         "comment": "Very strong and pungent hing. Just a pinch transforms the entire dal!",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🌶️"
   },
   {
     "id": "spc-009",
@@ -421,7 +321,7 @@
     "price": 250,
     "originalPrice": 299,
     "unit": "kg",
-    "image": "https://tse1.mm.bing.net/th/id/OIP.7qlDuxaq__CMHfNq3LMxyQHaEK?pid=Api&P=0&h=180",
+    "image": "https://5.imimg.com/data5/SELLER/Default/2025/8/536244380/EF/QZ/QV/241784674/organic-coriander-powder.webp",
     "description": "Pure stone-ground coriander powder (కొత్తిమీర పొడి) made from premium coriander seeds. Adds mild, citrusy flavor and rich aroma to curries and gravies.",
     "rating": 4.6,
     "reviews": 128,
@@ -446,7 +346,8 @@
         "comment": "Very fine coriander powder with excellent aroma. Freshly ground taste in every pinch!",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🌶️"
   },
   {
     "id": "spc-011",
@@ -491,7 +392,7 @@
     "price": 30,
     "originalPrice": 40,
     "unit": "pack",
-    "image": "https://tse4.mm.bing.net/th/id/OIP.M5S9JpffAVMGwFLNzNluiAHaD4?pid=Api&P=0&h=180",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Turmeric_Powder.jpg?utm_source=te.wiktionary.org&utm_campaign=index&utm_content=thumbnail_unscaled",
     "description": "Pure golden turmeric powder (పసుపు) with high curcumin content. Adds vibrant color, earthy flavor, and powerful anti-inflammatory health benefits to every meal.",
     "rating": 4.8,
     "reviews": 198,
@@ -516,7 +417,8 @@
         "comment": "Bright yellow turmeric with excellent aroma. Perfect for our daily cooking and turmeric milk.",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🌶️"
   },
   {
     "id": "dals-004",
@@ -596,7 +498,7 @@
     "price": 120,
     "originalPrice": 130,
     "unit": "kg",
-    "image": "https://tse2.mm.bing.net/th/id/OIP.ly07bJ9D8AuN5RlW0XU5CwHaD4?pid=Api&P=0&h=180",
+    "image": "https://www.dishadaily.com/h-upload/2023/05/26/218813-minapappu.webp",
     "description": "Premium whole urad dal (మినప్పులు) with skin intact. High protein, rich earthy flavor. Ideal for Dal Makhani, wholesome curries, and nutritious sprouts.",
     "rating": 4.6,
     "reviews": 87,
@@ -620,7 +522,8 @@
         "comment": "Very good whole urad dal. Rich taste and cooks beautifully for Dal Makhani.",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🧆"
   },
   {
     "id": "ess-001",
@@ -630,7 +533,7 @@
     "price": 55,
     "originalPrice": 60,
     "unit": "kg",
-    "image": "https://www.nutritionfact.in/wp-content/uploads/2022/02/jaggery.jpg",
+    "image": "https://dayli.in/cdn/shop/files/61uErQ_hStL._AC_UF1000_1000_QL80_b0f65e6d-8119-49e1-b3f5-0def83d6701d.jpg?v=1755888685",
     "description": "Natural unrefined jaggery blocks (బెల్లం). Rich caramel flavor with iron and minerals intact. Healthier sweetener for sweets, tea, and traditional recipes.",
     "rating": 4.7,
     "reviews": 134,
@@ -655,7 +558,8 @@
         "comment": "Pure and fresh jaggery with rich golden color. Perfect sweetness for our traditional sweets!",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🧂"
   },
   {
     "id": "ess-002",
@@ -700,7 +604,7 @@
     "price": 150,
     "originalPrice": 179,
     "unit": "pack",
-    "image": "https://tse3.mm.bing.net/th/id/OIP.2nsPhJzLebYzlUXIbxHB0UwAiHaHa?pid=Api&P=0&h=180",
+    "image": "https://dayli.in/cdn/shop/files/f98ea047-0504-46e7-b7de-757376fd28c0.webp?v=1755888318",
     "description": "Standard grade tamarind (చింతపండు రకం 2) with seeds. Good sour kick for daily cooking. Ideal for everyday sambar, rasam, and pickles at budget-friendly price.",
     "rating": 4.4,
     "reviews": 93,
@@ -723,7 +627,8 @@
         "comment": "Good tamarind for daily use. Value for money and decent sour taste.",
         "image": ""
       }
-    ]
+    ],
+    "badgeEmoji": "🧂"
   },
   {
     "id": "ess-004",

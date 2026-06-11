@@ -102,11 +102,37 @@ function syncCatalogAndDataJs(forceWriteToDataJs = false) {
 
     // 100ms buffer to avoid small write race conditions
     if (dataJsMtime > catalogMtime + 100) {
-      // data.js was edited manually in the editor. Update the database json files.
-      console.log("🔄 Detecting manual edit in data.js. Syncing to database json files...");
+      // data.js was edited manually (e.g. products added/removed in code).
+      // SMART MERGE: preserve existing catalog.json customisations (images,
+      // prices, inStock flags, etc.) for products that already exist.
+      // Only add genuinely new products and drop deleted ones.
+      console.log("🔄 Detecting manual edit in data.js. Smart-merging into catalog.json...");
       const defaults = loadDefaultsFromDataJs();
       if (defaults.catalog && defaults.catalog.length > 0) {
-        fs.writeFileSync(catalogPath, JSON.stringify(defaults.catalog, null, 2), 'utf8');
+        // Load existing catalog to preserve user-set field values
+        let existingCatalog = [];
+        try {
+          existingCatalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+        } catch (e) { /* ignore parse error, start fresh */ }
+
+        const existingMap = {};
+        existingCatalog.forEach(p => { existingMap[p.id] = p; });
+
+        // Build merged catalog: for each product in data.js, use existing
+        // catalog.json entry if present (preserving custom fields), otherwise
+        // use the data.js entry as a fresh seed.
+        const merged = defaults.catalog.map(seedProduct => {
+          const existing = existingMap[seedProduct.id];
+          if (existing) {
+            // Product already exists — keep ALL existing values (image, price, etc.)
+            // but allow structural fields added to data.js to come through if missing.
+            return Object.assign({}, seedProduct, existing);
+          }
+          return seedProduct; // New product from data.js — add as-is
+        });
+
+        fs.writeFileSync(catalogPath, JSON.stringify(merged, null, 2), 'utf8');
+        console.log(`✅ Smart-merged catalog.json (${merged.length} products, existing customisations preserved)`);
       }
       if (defaults.coupons && Object.keys(defaults.coupons).length > 0) {
         fs.writeFileSync(couponsPath, JSON.stringify(defaults.coupons, null, 2), 'utf8');
@@ -133,6 +159,7 @@ function syncCatalogAndDataJs(forceWriteToDataJs = false) {
     console.error("❌ Error during bidirectional catalog sync:", err);
   }
 }
+
 
 function initializeDatabase() {
   if (!fs.existsSync(dbDir)) {

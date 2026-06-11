@@ -79,7 +79,7 @@ class GroceryApp {
         } else {
            // Auto-remove the deleted seed products if they exist in localStorage
            const deletedIds = JSON.parse(localStorage.getItem('gp_deleted_products')) || [];
-           const removedIds = ['rice-001', 'rice-002', 'rice-003', 'dals-001', 'dals-002', 'dals-003', 'oils-001', 'oils-002', 'oils-003', 'spc-001', 'spc-002', 'spc-003'];
+           const removedIds = ['rice-001', 'rice-002', 'rice-003', 'dals-001', 'dals-002', 'dals-003', 'oils-001', 'oils-002', 'oils-003', 'spc-001', 'spc-002', 'spc-003', 'df-001', 'df-002', 'df-003'];
            const allRemovedIds = [...removedIds, ...deletedIds];
            const hasStale = parsed.some(p => allRemovedIds.includes(p.id));
 
