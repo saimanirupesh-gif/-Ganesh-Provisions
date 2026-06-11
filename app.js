@@ -88,6 +88,20 @@ class GroceryApp {
             localStorage.setItem('gp_catalog', JSON.stringify(parsed));
           }
 
+          // Auto-update images of existing products if they are old/hotlinked URLs
+          let updatedAnyImage = false;
+          parsed = parsed.map(p => {
+            const seed = GROCERY_PRODUCTS.find(sp => sp.id === p.id);
+            if (seed && (!p.image || !p.image.includes('unsplash.com'))) {
+              p.image = seed.image;
+              updatedAnyImage = true;
+            }
+            return p;
+          });
+          if (updatedAnyImage) {
+            localStorage.setItem('gp_catalog', JSON.stringify(parsed));
+          }
+
           // Auto-add any new seed products that are in GROCERY_PRODUCTS but not in parsed catalog (excluding deleted ones)
           const parsedIds = new Set(parsed.map(p => p.id));
           const newProducts = GROCERY_PRODUCTS.filter(p => !parsedIds.has(p.id) && !deletedIds.includes(p.id));
