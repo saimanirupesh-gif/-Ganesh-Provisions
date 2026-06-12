@@ -7,7 +7,7 @@ const GROCERY_PRODUCTS = [
     "price": 65,
     "originalPrice": 75,
     "unit": "kg",
-    "image": "https://starbazarjapan.com/wp-content/uploads/2020/01/Atta-Whole-Wheat-1-kg-Loose.jpg",
+    "image": "https://dukaan.b-cdn.net/700x700/webp/media/0fa6f0d4-6eb8-4f21-9521-17c78a5c3ef5.jpg",
     "description": "Premium quality whole wheat flour (గోధుమ పిండి), finely ground for making soft rotis, chapatis, and parathas. Rich in fiber and essential nutrients for daily cooking.",
     "rating": 4.7,
     "reviews": 156,
