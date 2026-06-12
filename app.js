@@ -2025,7 +2025,7 @@ class GroceryApp {
 
     // Fallback authentication
     if (!localIsValid) {
-      this.showToast("Incorrect Owner Credentials! Use ganesh/9150436455.", "error");
+      this.showToast("Incorrect Owner Credentials!", "error");
       return;
     }
 
