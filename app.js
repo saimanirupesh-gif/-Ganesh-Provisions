@@ -69,6 +69,31 @@ class GroceryApp {
   // --- Persistent Catalog Seeder ---
   initCatalogDatabase() {
     let savedCatalog = localStorage.getItem('gp_catalog');
+    
+    // Auto-migrate browser cache back from restaurant edition to grocery storefront
+    if (savedCatalog) {
+      try {
+        let parsed = JSON.parse(savedCatalog);
+        const hasRestaurantItems = parsed.some(p => 
+          p.category === 'biryani' || 
+          p.category === 'curries' || 
+          p.category === 'starters' || 
+          p.category === 'breads' || 
+          p.category === 'desserts'
+        );
+        if (hasRestaurantItems) {
+          localStorage.removeItem('gp_catalog');
+          localStorage.removeItem('gp_cart');
+          localStorage.removeItem('gp_wishlist');
+          localStorage.removeItem('gp_deleted_products');
+          localStorage.removeItem('gp_settings');
+          localStorage.removeItem('gp_coupons');
+          window.location.reload();
+          return;
+        }
+      } catch (e) {}
+    }
+
     if (!savedCatalog) {
       localStorage.setItem('gp_catalog', JSON.stringify(GROCERY_PRODUCTS));
     } else {
