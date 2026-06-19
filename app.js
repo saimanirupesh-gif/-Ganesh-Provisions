@@ -827,6 +827,30 @@ class GroceryApp {
     this.bind3DTiltEvents();
   }
 
+  renderSkeletons() {
+    if (!this.dom.productsGrid) return;
+    
+    let skeletonHtml = '';
+    for (let i = 0; i < 6; i++) {
+      skeletonHtml += `
+        <div class="product-card skeleton-card">
+          <div class="skeleton-visual shimmer"></div>
+          <div class="product-details-box" style="gap: 12px; display: flex; flex-direction: column; padding: 20px;">
+            <div class="skeleton-line shimmer" style="width: 40%; height: 12px; border-radius: 4px;"></div>
+            <div class="skeleton-line shimmer" style="width: 80%; height: 20px; border-radius: 4px;"></div>
+            <div class="skeleton-line shimmer" style="width: 95%; height: 14px; border-radius: 4px; margin-top: 4px;"></div>
+            <div class="skeleton-line shimmer" style="width: 70%; height: 14px; border-radius: 4px;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+              <div class="skeleton-line shimmer" style="width: 30%; height: 24px; border-radius: 4px;"></div>
+              <div class="skeleton-line shimmer" style="width: 40%; height: 32px; border-radius: 6px;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    this.dom.productsGrid.innerHTML = skeletonHtml;
+  }
+
   updateProductCardButtons(prodId) {
     const card = document.querySelector(`.product-card[data-id="${prodId}"]`);
     if (!card) return;
@@ -901,8 +925,17 @@ class GroceryApp {
   handleCategoryClick(catId) {
     this.state.activeCategory = catId;
     this.renderCategoryTabs();
-    this.renderProducts();
-    this.scrollToCatalog();
+    
+    this.renderSkeletons();
+    if (this.categoryTimeout) {
+      clearTimeout(this.categoryTimeout);
+    }
+    
+    this.categoryTimeout = setTimeout(() => {
+      this.renderProducts();
+      this.scrollToCatalog();
+      this.categoryTimeout = null;
+    }, 400);
   }
 
   // --- Dynamic Search Bar Utilities ---
@@ -945,20 +978,29 @@ class GroceryApp {
     if (this.dom.catalogSearch) this.dom.catalogSearch.value = prodName;
     this.state.searchQuery = prodName;
     if (this.dom.suggestionsBox) this.dom.suggestionsBox.style.display = 'none';
-    this.renderProducts();
-    this.scrollToCatalog();
+    this.renderSkeletons();
+    setTimeout(() => {
+      this.renderProducts();
+      this.scrollToCatalog();
+    }, 400);
   }
 
   triggerSearch() {
-    this.renderProducts();
-    this.scrollToCatalog();
+    this.renderSkeletons();
+    setTimeout(() => {
+      this.renderProducts();
+      this.scrollToCatalog();
+    }, 400);
   }
 
   quickFilter(term) {
     if (this.dom.catalogSearch) this.dom.catalogSearch.value = term;
     this.state.searchQuery = term;
-    this.renderProducts();
-    this.scrollToCatalog();
+    this.renderSkeletons();
+    setTimeout(() => {
+      this.renderProducts();
+      this.scrollToCatalog();
+    }, 400);
   }
 
   resetFilters() {
@@ -971,8 +1013,11 @@ class GroceryApp {
     if (selectFilter) selectFilter.value = 'default';
 
     this.renderCategoryTabs();
-    this.renderProducts();
-    this.setView('home');
+    this.renderSkeletons();
+    setTimeout(() => {
+      this.renderProducts();
+      this.setView('home');
+    }, 400);
   }
 
   handleSortChange(event) {
@@ -1115,7 +1160,18 @@ class GroceryApp {
 
   syncCartBadge() {
     const count = this.state.cart.reduce((sum, item) => sum + item.qty, 0);
-    if (this.dom.cartCount) this.dom.cartCount.textContent = count;
+    if (this.dom.cartCount) {
+      this.dom.cartCount.textContent = count;
+      
+      const cartTrigger = document.getElementById('cart-trigger');
+      const mobCart = document.getElementById('mob-nav-cart');
+      const targetElement = (window.innerWidth <= 768 && mobCart) ? mobCart : cartTrigger;
+      
+      if (targetElement) {
+        targetElement.classList.add('pulse-badge');
+        setTimeout(() => targetElement.classList.remove('pulse-badge'), 500);
+      }
+    }
   }
 
   toggleCartDrawer(isOpen) {
@@ -3285,7 +3341,18 @@ class GroceryApp {
   }
 
   syncWishlistBadge() {
-    if (this.dom.wishlistCount) this.dom.wishlistCount.textContent = this.state.wishlist.length;
+    if (this.dom.wishlistCount) {
+      this.dom.wishlistCount.textContent = this.state.wishlist.length;
+      
+      const wishlistTrigger = document.getElementById('wishlist-trigger');
+      const mobWish = document.getElementById('mob-nav-wishlist');
+      const targetElement = (window.innerWidth <= 768 && mobWish) ? mobWish : wishlistTrigger;
+      
+      if (targetElement) {
+        targetElement.classList.add('pulse-badge');
+        setTimeout(() => targetElement.classList.remove('pulse-badge'), 500);
+      }
+    }
   }
 
   showWishlist() {
@@ -3307,8 +3374,11 @@ class GroceryApp {
       const catalogTitle = document.getElementById('catalog-title');
       if (catalogTitle) catalogTitle.textContent = "Your Wishlist ❤️";
 
-      this.renderProductsGridWithList(products);
-      this.scrollToCatalog();
+      this.renderSkeletons();
+      setTimeout(() => {
+        this.renderProductsGridWithList(products);
+        this.scrollToCatalog();
+      }, 400);
     }
   }
 
@@ -3416,15 +3486,14 @@ class GroceryApp {
     toast.innerHTML = `
       ${icon}
       <span>${message}</span>
-      <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+      <button class="toast-close" onclick="this.parentElement.classList.add('toast-exit'); setTimeout(() => this.parentElement.remove(), 400)">&times;</button>
+      <div class="toast-progress"></div>
     `;
 
     this.dom.toastWrapper.appendChild(toast);
 
     setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(20px)';
-      toast.style.transition = 'all 0.4s ease';
+      toast.classList.add('toast-exit');
       setTimeout(() => toast.remove(), 400);
     }, 4500);
   }
